@@ -546,7 +546,7 @@ class _ShowcaseState extends State<Showcase> {
     return Stack(
       children: [
         GestureDetector(
-          onPanUpdate: (_) {
+          onVerticalDragEnd: (_) {
             if (!showCaseWidgetState.disableBarrierInteraction &&
                 !widget.disableBarrierInteraction) {
               _nextIfAny();

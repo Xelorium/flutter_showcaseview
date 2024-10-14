@@ -553,6 +553,13 @@ class _ShowcaseState extends State<Showcase> {
             }
             widget.onBarrierClick?.call();
           },
+          onPanUpdate: (_) {
+            if (!showCaseWidgetState.disableBarrierInteraction &&
+                !widget.disableBarrierInteraction) {
+              _nextIfAny();
+            }
+            widget.onBarrierClick?.call();
+          },
           child: ClipPath(
             clipper: RRectClipper(
               area: _isScrollRunning ? Rect.zero : rectBound,

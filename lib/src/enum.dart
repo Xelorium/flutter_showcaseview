@@ -21,3 +21,5 @@
  */
 
 enum TooltipPosition { top, bottom }
+
+enum DragDirection { vertical, horizontal }

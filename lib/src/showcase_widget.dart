@@ -23,10 +23,9 @@
 import 'package:flutter/material.dart';
 
 import '../showcaseview.dart';
-import 'extension.dart';
 
 class ShowCaseWidget extends StatefulWidget {
-  final Builder builder;
+  final WidgetBuilder builder;
 
   /// Triggered when all the showcases are completed.
   final VoidCallback? onFinish;
@@ -157,7 +156,8 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
   }
 
   void initRootWidget() {
-    ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       final rootWidget = context.findAncestorStateOfType<State<WidgetsApp>>();
       rootRenderObject = rootWidget?.context.findRenderObject() as RenderBox?;
       rootWidgetSize = rootWidget == null
@@ -259,7 +259,9 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
   Widget build(BuildContext context) {
     return _InheritedShowCaseView(
       activeWidgetIds: ids?.elementAt(activeWidgetId!),
-      child: widget.builder,
+      child: Builder(
+        builder: widget.builder,
+      ),
     );
   }
 }
@@ -269,8 +271,8 @@ class _InheritedShowCaseView extends InheritedWidget {
 
   const _InheritedShowCaseView({
     required this.activeWidgetIds,
-    required Widget child,
-  }) : super(child: child);
+    required super.child,
+  });
 
   @override
   bool updateShouldNotify(_InheritedShowCaseView oldWidget) =>

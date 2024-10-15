@@ -27,7 +27,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'enum.dart';
-import 'extension.dart';
 import 'get_position.dart';
 import 'layout_overlays.dart';
 import 'shape_clipper.dart';
@@ -418,13 +417,15 @@ class _ShowcaseState extends State<Showcase> {
       }
 
       if (showCaseWidgetState.autoPlay) {
-        timer = Timer(Duration(seconds: showCaseWidgetState.autoPlayDelay.inSeconds), _nextIfAny);
+        timer = Timer(
+            Duration(seconds: showCaseWidgetState.autoPlayDelay.inSeconds),
+            _nextIfAny);
       }
     }
   }
 
   void _scrollIntoView() {
-    ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       setState(() => _isScrollRunning = true);
       await Scrollable.ensureVisible(
         widget.key.currentContext!,
@@ -460,18 +461,22 @@ class _ShowcaseState extends State<Showcase> {
   }
 
   void initRootWidget() {
-    ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       rootWidgetSize = showCaseWidgetState.rootWidgetSize;
       rootRenderObject = showCaseWidgetState.rootRenderObject;
     });
   }
 
   void recalculateRootWidgetSize() {
-    ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      final rootWidget = context.findRootAncestorStateOfType<State<WidgetsApp>>();
+      final rootWidget =
+          context.findRootAncestorStateOfType<State<WidgetsApp>>();
       rootRenderObject = rootWidget?.context.findRenderObject() as RenderBox?;
-      rootWidgetSize = rootWidget == null ? MediaQuery.of(context).size : rootRenderObject?.size;
+      rootWidgetSize = rootWidget == null
+          ? MediaQuery.of(context).size
+          : rootRenderObject?.size;
     });
   }
 
@@ -561,12 +566,22 @@ class _ShowcaseState extends State<Showcase> {
                   widget.onBarrierClick?.call();
                 }
               : null,
+          onPanUpdate: (_) {
+            if (!showCaseWidgetState.disableBarrierInteraction &&
+                !widget.disableBarrierInteraction) {
+              _nextIfAny();
+            }
+            widget.onBarrierClick?.call();
+          },
           child: ClipPath(
             clipper: RRectClipper(
               area: _isScrollRunning ? Rect.zero : rectBound,
               isCircle: widget.targetShapeBorder is CircleBorder,
-              radius: _isScrollRunning ? BorderRadius.zero : widget.targetBorderRadius,
-              overlayPadding: _isScrollRunning ? EdgeInsets.zero : widget.targetPadding,
+              radius: _isScrollRunning
+                  ? BorderRadius.zero
+                  : widget.targetBorderRadius,
+              overlayPadding:
+                  _isScrollRunning ? EdgeInsets.zero : widget.targetPadding,
             ),
             child: blur != 0
                 ? BackdropFilter(
@@ -575,7 +590,8 @@ class _ShowcaseState extends State<Showcase> {
                       width: mediaQuerySize.width,
                       height: mediaQuerySize.height,
                       decoration: BoxDecoration(
-                        color: widget.overlayColor.withOpacity(widget.overlayOpacity),
+                        color: widget.overlayColor
+                            .withOpacity(widget.overlayOpacity),
                       ),
                     ),
                   )
@@ -583,7 +599,8 @@ class _ShowcaseState extends State<Showcase> {
                     width: mediaQuerySize.width,
                     height: mediaQuerySize.height,
                     decoration: BoxDecoration(
-                      color: widget.overlayColor.withOpacity(widget.overlayOpacity),
+                      color: widget.overlayColor
+                          .withOpacity(widget.overlayOpacity),
                     ),
                   ),
           ),
@@ -618,8 +635,10 @@ class _ShowcaseState extends State<Showcase> {
             contentWidth: widget.width,
             onTooltipTap: _getOnTooltipTap,
             tooltipPadding: widget.tooltipPadding,
-            disableMovingAnimation: widget.disableMovingAnimation ?? showCaseWidgetState.disableMovingAnimation,
-            disableScaleAnimation: widget.disableScaleAnimation ?? showCaseWidgetState.disableScaleAnimation,
+            disableMovingAnimation: widget.disableMovingAnimation ??
+                showCaseWidgetState.disableMovingAnimation,
+            disableScaleAnimation: widget.disableScaleAnimation ??
+                showCaseWidgetState.disableScaleAnimation,
             movingAnimationDuration: widget.movingAnimationDuration,
             tooltipBorderRadius: widget.tooltipBorderRadius,
             scaleAnimationDuration: widget.scaleAnimationDuration,
@@ -686,7 +705,9 @@ class _TargetWidget extends StatelessWidget {
         height: size.height + 16,
         width: size.width + 16,
         decoration: ShapeDecoration(
-          shape: radius != null ? RoundedRectangleBorder(borderRadius: radius!) : shapeBorder,
+          shape: radius != null
+              ? RoundedRectangleBorder(borderRadius: radius!)
+              : shapeBorder,
         ),
       ),
     );

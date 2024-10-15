@@ -11,34 +11,24 @@ A Flutter package allows you to Showcase/Highlight your widgets step by step.
 
 ![The example app running in Android](https://raw.githubusercontent.com/SimformSolutionsPvtLtd/flutter_showcaseview/master/preview/showcaseview.gif)
 
-## Migration guide for release 2.0.0
-Renamed properties/fields of widgets mentioned below in the table.
+## Migration guide for release 3.0.0
+Removed builder widget from `ShowCaseWidget` and replaced it with builder function
 
-| Before                  | After                    |
-|-------------------------|--------------------------|
-| autoPlayLockEnable      | enableAutoPlayLock       |
-| shapeBorder             | targetShapeBorder        |
-| showcaseBackgroundColor | tooltipBackgroundColor   |
-| contentPadding          | tooltipPadding           |
-| overlayPadding          | targetPadding            |
-| radius                  | targetBorderRadius       |
-| tipBorderRadius         | tooltipBorderRadius      |
-| disableAnimation        | disableMovingAnimation   |
-| animationDuration       | movingAnimationDuration  |
+Before:
+```dart
+ShowCaseWidget(
+  builder: Builder(
+    builder : (context) => Somewidget()
+  ),
+),
+```
 
-Removed unused parameter of `Showcase.withWidget()` mentioned below:
-<ul>
-<li>title</li>
-<li>titleAlignment</li>
-<li>titleTextStyle</li>
-<li>description</li>
-<li>descriptionAlignment</li>
-<li>descTextStyle</li>
-<li>textColor</li>
-<li>tooltipBackgroundColor</li>
-<li>tooltipBorderRadius</li>
-<li>tooltipPadding</li>
-</ul>
+After:
+```dart
+ShowCaseWidget(
+  builder : (context) => Somewidget(),
+),
+```
 
 ## Installing
 

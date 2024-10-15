@@ -539,14 +539,12 @@ class _ShowcaseState extends State<Showcase> {
     return Stack(
       children: [
         GestureDetector(
-          onTap: widget.dragDirection == null
-              ? () {
+          onTap:  () {
                   if (!showCaseWidgetState.disableBarrierInteraction && !widget.disableBarrierInteraction) {
                     _nextIfAny();
                   }
                   widget.onBarrierClick?.call();
-                }
-              : null,
+                },
           onHorizontalDragEnd: widget.dragDirection == DragDirection.horizontal
               ? (_) {
                   if (!showCaseWidgetState.disableBarrierInteraction && !widget.disableBarrierInteraction) {
